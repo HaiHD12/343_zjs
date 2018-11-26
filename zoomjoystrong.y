@@ -1,10 +1,21 @@
+/******************************************
+* This is a Bison program where we created
+* our language called ZoomJoyStrong.
+*
+* @author Hai Duong
+* @date November 26, 2018
+*********************************************/
 %{
   #include <stdio.h>
   #include "zoomjoystrong.h"
   int yyerror(const char* err);
   int yylex();
-  int yylineno;
 %}
+
+%union {
+      int iVal;
+      double fVal;
+}
 
 %token END
 %token END_STATEMENT
@@ -13,8 +24,9 @@
 %token CIRCLE
 %token RECTANGLE
 %token SET_COLOR
-%token INT
-%token FLOAT
+%token ERROR
+%token <iVal> INT
+%token <fVal> FLOAT
 
 %%
 
@@ -49,13 +61,23 @@ set_color: SET_COLOR INT INT INT END_STATEMENT {set_color($2, $3, $4);}
 
 %%
 
+/******************************************
+* The main helps start and yyparse() the
+* the zoomjoystrong.
+*********************************************/
 int main (int argc, char** argv) {
     setup();
     yyparse();
     return 0;
 }
 
+
+/******************************************
+* the yyerror() function writes the error
+* statement that happens with zoomjoystrong.
+*********************************************/
 int yyerror(const char *err) {
   printf("%s\n", err);
+  yyparse();
   return 1;
 }

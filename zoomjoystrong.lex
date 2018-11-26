@@ -3,7 +3,7 @@
 * our language called ZoomJoyStrong.
 *
 * @author Hai Duong
-* @date October 28, 2018
+* @date November 26, 2018
 *********************************************/
 
 %{
@@ -15,15 +15,16 @@
 
 %%
 
-(END)           {printf("END\n");}
-;               {printf("END_STATEMENT\n");}
-(POINT|point)   {printf("POINT\n");}
-(LINE)          {printf("LINE\n");}
-(CIRCLE)        {printf("CIRCLE\n");}
-(RECTANGLE)     {printf("RECTANGLE\n");}
-(SET_COLOR)     {printf("SET_COLOR\n");}
-[0-9]+          {printf("INT %s\n", yytext);}
-[0-9]+\.[0-9]+  {printf("FLOAT %s\n", yytext);}
-[\n \t \ ]+     ;
-.               {printf("''%s' IS INVALID ON LINE %d.\n", yytext, yylineno);}
+(END|end)                 {return END;}
+;                         {return END_STATEMENT;}
+(POINT|point)             {return POINT;}
+(LINE|line)               {return LINE;}
+(CIRCLE|circle)           {return CIRCLE;}
+(RECTANGLE|rectangle)     {return RECTANGLE;}
+(SET_COLOR|set_color)     {return SET_COLOR;}
+[0-9]+                    {yylval.iVal=atoi(yytext); return INT;}
+[0-9]+\.[0-9]+            {yylval.fVal=atof(yytext); return FLOAT;}
+[\n \t \ ]+               ;
+.                         {return ERROR;}
+
 %%
